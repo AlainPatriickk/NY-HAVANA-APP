@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <h3 class="fw-bold mb-4 text-primary"><i class="bi bi-search"></i> Recherche Quittances Impayées</h3>
+
+    <!-- Formulaire de recherche principal -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form action="{{ url_for('recherche') }}" method="GET" class="row g-3">
+                <div class="col-md-9">
+                    <input type="text" name="q" value="{{ query }}" class="form-control form-control-lg" placeholder="Entrez le Nom du Client, N° Police ou N° Quittance..." required>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary btn-lg w-100"><i class="bi bi-search"></i> Rechercher</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if query %}
+        {% if results %}
+        <!-- Card d'en-tête sy Sivana par Police -->
+        <div class="card shadow-sm border-0 mb-4 bg-light">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-5">
+                        <h5 class="fw-bold text-dark mb-1">Nom Client / Assuré : <span class="text-primary">{{ client_name }}</span></h5>
+                        <p class="text-muted mb-0">Total Solde Impayé : <strong class="text-danger fs-5">{{ total_reliquat }} Ar</strong></p>
+                    </div>
+
+                    <!-- Sivana (Filtre par N° Police) -->
+                    <div class="col-md-3">
+                        {% if polices_dispo and polices_dispo|length > 1 %}
+                        <form action="{{ url_for('recherche') }}" method="GET" class="d-flex align-items-center">
+                            <input type="hidden" name="q" value="{{ query }}">
+                            <div class="input-group">
+                                <span class="input-group-text bg-white fw-bold text-secondary"><i class="bi bi-funnel-fill me-1"></i> Police</span>
+                                <select name="police" class="form-select border-primary" onchange="this.form.submit()">
+                                    <option value="">-- Toutes ({{ polices_dispo|length }}) --</option>
+                                    {% for pol in polices_dispo %}
+                                    <option value="{{ pol }}" {% if pol == selected_police %}selected{% endif %}>
+                                        Police n° {{ pol }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </form>
+                        {% elif selected_police %}
+                        <div class="badge bg-secondary p-2">Police active : {{ selected_police }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Boutons Génération Documents -->
+                    <div class="col-md-4 text-end">
+                        <a href="{{ url_for('generate_lsp', q=query, police=selected_police) }}" target="_blank" class="btn btn-warning fw-bold text-dark me-2">
+                            <i class="bi bi-file-earmark-pdf"></i> Générer LSP
+                        </a>
+                        <a href="{{ url_for('generate_facture', q=query, police=selected_police) }}" target="_blank" class="btn btn-success fw-bold">
+                            <i class="bi bi-printer"></i> Extrait de Compte
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tableau des résultats -->
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped align-middle mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>N° Quittance</th>
+                                <th>N° Police</th>
+                                <th>Nom Assuré / Client</th>
+                                <th>Date Effet</th>
+                                <th>Date Echéance</th>
+                                <th class="text-end">Prime Totale</th>
+                                <th class="text-end">Montant Encaissé</th>
+                                <th class="text-end">Reliquat Impayé</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in results %}
+                            <tr>
+                                <td class="fw-bold text-primary">{{ item['N° Quittance'] }}</td>
+                                <td><span class="badge bg-outline-dark text-dark border">{{ item['N° Police'] }}</span></td>
+                                <td>{{ item['Client'] }}</td>
+                                <td>{{ item['Date Effet'] }}</td>
+                                <td>{{ item['Date Echéance'] }}</td>
+                                <td class="text-end">{{ "{:,.2f}".format(item['Montant Initial']).replace(',', ' ') }} Ar</td>
+                                <td class="text-end text-success">{{ "{:,.2f}".format(item['Montant Encaissé']).replace(',', ' ') }} Ar</td>
+                                <td class="text-end fw-bold text-danger">{{ "{:,.2f}".format(item['Reliquat']).replace(',', ' ') }} Ar</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-info shadow-sm" role="alert">
+            <i class="bi bi-info-circle me-2"></i> Tsy misy quittance impayée hita amin'io fikarohana io.
+        </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

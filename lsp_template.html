@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>LSP - {{ num_lsp }}</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 2.2cm 2.5cm;
+        }
+        
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 12pt;
+            line-height: 2.2;
+            color: #000;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page {
+            page-break-after: always;
+            position: relative;
+            min-height: 95vh;
+        }
+
+        .page:last-child {
+            page-break-after: avoid;
+        }
+
+        /* Page 1 Header Layout */
+        .date-right {
+            text-align: right;
+            font-size: 12pt;
+            margin-bottom: 5px;
+        }
+
+        .header-center {
+            text-align: center;
+            font-size: 8.5pt;
+            line-height: 1.35;
+            margin-bottom: 25px;
+        }
+
+        .company-name {
+            font-size: 14pt;
+            font-weight: bold;
+        }
+
+        .ref-client-container {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .ref-left {
+            float: left;
+            width: 45%;
+            font-size: 11pt;
+            font-weight: bold;
+        }
+
+        .client-right {
+            float: right;
+            width: 50%;
+            font-size: 11pt;
+            font-weight: bold;
+            line-height: 1.25;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        .objet-line {
+            font-size: 11pt;
+            margin-bottom: 20px;
+        }
+
+        /* Layout 2 Columns Page 1 */
+        .two-columns {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .col-left {
+            float: left;
+            width: 45%;
+            font-size: 9pt;
+            text-align: justify;
+            line-height: 1.15;
+            padding-right: 15px;
+            box-sizing: border-box;
+        }
+
+        .col-right {
+            float: right;
+            width: 53%;
+            font-size: 10.5pt;
+            text-align: justify;
+            line-height: 1.25;
+            box-sizing: border-box;
+        }
+
+        .article-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .article-p {
+            margin-bottom: 8px;
+        }
+
+        .letter-p {
+            margin-bottom: 12px;
+            text-indent: 20px;
+        }
+
+        .signature-box {
+            margin-top: 40px;
+            text-align: right;
+            padding-right: 30px;
+            font-weight: bold;
+            font-size: 11pt;
+        }
+
+        /* Page 2 - Detail / Annexe */
+        .page-2-title {
+            font-weight: bold;
+            font-size: 12pt;
+            text-decoration: underline;
+            margin-bottom: 15px;
+        }
+
+        .table-detail {
+            width: 65%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .table-detail th, .table-detail td {
+            border: 1px solid #000;
+            padding: 4px 8px;
+            font-size: 10pt;
+        }
+
+        .table-detail th {
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .table-detail td.amount {
+            text-align: right;
+        }
+
+        .total-row td {
+            font-weight: bold;
+        }
+
+        /* Print Controls */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        .btn-print-box {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 9999;
+        }
+
+        .btn-print {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            font-weight: bold;
+            font-size: 11pt;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="btn-print-box no-print">
+        <button onclick="window.print()" class="btn-print">Imprimer / Télécharger PDF</button>
+    </div>
+
+    <!-- ================= PAGE 1 ================= -->
+    <div class="page">
+        <div class="date-right">
+            Fianarantsoa, le {{ today_date }}
+        </div>
+
+        <div class="header-center">
+            <span class="company-name">NY HAVANA</span><br>
+            COMPAGNIE MALGACHE D’ASSURANCES ET DE REASSURANCE<br>
+            Société Anonyme au capital de 10 700 000 000 Ar<br>
+            Entreprise régie par la Loi n°99-013 du 02 août 1999<br>
+            Siège Social : Immeuble NyHavana – Zone des 67 Ha<br>
+            B.P : 3881 – Antananarivo 101 – Tél : (261 20) 22 267 60<br>
+            Fax : (261 20) 22 243 03 – Email : nyhavana@wanadoo.mg<br>
+            RCS Antananarivo N° 2003 B 01269 – N° Stat : 66011 11 1968 0010003
+        </div>
+
+        <div class="ref-client-container">
+            <div class="ref-left">
+                N° {{ num_lsp }}
+            </div>
+            <div class="client-right">
+                {{ client_name }}<br>
+                AGENCE FIANARANTSOA
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <div class="objet-line">
+            <strong>Objet :</strong> Situation des primes à Police n° <strong>{{ police_num }}</strong>
+        </div>
+
+        <!-- Layout Colonnes (Loi à gauche, Lettre à droite) -->
+        <div class="two-columns">
+            <div class="col-left">
+                <div class="article-title">Article 179 de la Loi 99-013 du 2 août 1999</div>
+                
+                <div class="article-p">
+                    L’entreprise d’assurance ou de capitalisation n’a pas d’action pour exiger le paiement de cotisations ou des primes.
+                </div>
+                <div class="article-p">
+                    Lorsqu’une cotisation ou prime ou une fraction de cotisation ou prime n’est pas payée dans les dix jours de son échéance, l’assureur adresse au contractant une lettre recommandée par laquelle il informe qu’à l’expiration d’un délai de quarante jours à dater de l’envoi de cette lettre le défaut de paiement entraîne soit la résiliation du contrat en cas d’inexistence ou d’insuffisance de la valeur de rachat, soit la réduction du contrat.
+                </div>
+                <div class="article-p">
+                    Le défaut de paiement d’une cotisation ou de prime d’un contrat de capitalisation ne peut avoir pour sanction que la suspension ou la résiliation pure et simple du contrat et, dans ce dernier cas, la mise à la disposition de l'assuré de la valeur de rachat que ledit contrat à éventuellement acquise.
+                </div>
+                <div class="article-p">
+                    L’envoi de la lettre recommandée par l’assureur rend la cotisation ou la prime portable dans tous les cas.
+                </div>
+            </div>
+
+            <div class="col-right">
+                <div style="margin-bottom: 12px;">Madame / Mademoiselle / Monsieur,</div>
+                
+                <div class="letter-p">
+                    Vous aviez souscrit à la police d’assurance identifiée en objet auprès de notre Agence de Fianarantsoa.
+                </div>
+                <div class="letter-p">
+                    Pour le maintien en vigueur du contrat, il est indispensable que toute prime échue soit duly acquittée. A cette fin, nous communiquons ci-joint le relevé de votre compte qui fait ressortir, sauf erreur ou omission de notre part, un montant total de <strong>{{ total_reliquat }} Ariary</strong> en attente de paiement.
+                </div>
+                <div class="letter-p">
+                    Aussi, vous invitons-nous vivement à venir vous acquitter de ladite somme au plutôt auprès de notre Agence de Fianarantsoa ou auprès de notre Siège Social sis zone des 67 Ha Antananarivo.
+                </div>
+                <div class="letter-p">
+                    Le défaut de cet acquittement dans un délai de quarante (40) jours à dater de la présente entraînera la mise en application des dispositions prévues par le texte en vigueur.
+                </div>
+                <div class="letter-p">
+                    Dans l’attente de votre prochaine visite pour la régularisation du montant sus indiqué et avec nos remerciements anticipés,
+                </div>
+                <div class="letter-p">
+                    Nous vous prions d’agréer, Madame / Mademoiselle / Monsieur, l’expression de nos sentiments dévoués.
+                </div>
+
+                <div class="signature-box">
+                    POUR LA COMPAGNIE
+
+
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+<!-- Eo am-pototry ny Pejy (Footer impression) -->
+<div style="position: absolute; bottom: 10px; left: 0; right: 0; font-size: 8pt; color: #555; border-top: 1px dashed #ccc; padding-top: 4px;">
+    Imprimé par : <strong>{{ current_user.nom_complet }}</strong> | Date : {{ datetime.now().strftime('%d/%m/%Y à %H:%M') }}
+</div>
+
+
+
+    <!-- ================= PAGE 2 (ANNEXE / DETAIL) ================= -->
+   
+
+ <div class="page">
+        <div class="page-2-title">DETAIL :</div>
+
+        <table class="table-detail">
+            <thead>
+                <tr>
+                    <th>Effet :</th>
+                    <th>Echéance :</th>
+                    <th style="text-align: right;">Montant (Prime Totale)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item['Date Effet'] }}</td>
+                    <td>{{ item['Date Echéance'] }}</td>
+                    <td class="amount">{{ "{:,.2f}".format(item['Montant Initial']).replace(',', ' ') }}</td>
+                </tr>
+                {% endfor %}
+                <tr class="total-row">
+                    <td colspan="2" style="font-weight: bold;">TOTAL</td>
+                    <td class="amount" style="font-weight: bold;">{{ total_reliquat }} AR</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="signature-box" style="margin-top: 100px;">
+            POUR LA COMPAGNIE
+        </div>
+    </div>
+<!-- Eo am-pototry ny Pejy (Footer impression) -->
+<div style="position: absolute; bottom: 10px; left: 0; right: 0; font-size: 8pt; color: #555; border-top: 1px dashed #ccc; padding-top: 4px;">
+    Imprimé par : <strong>{{ current_user.nom_complet }}</strong> | Date : {{ datetime.now().strftime('%d/%m/%Y à %H:%M') }}
+</div>
+
+</body>
+</html>

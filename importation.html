@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold text-dark"><i class="bi bi-file-earmark-arrow-up"></i> Importation des Données</h3>
+</div>
+
+<div class="row g-4">
+    <!-- Import Nouveau Arriéré -->
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100 border-primary">
+            <div class="card-header bg-primary text-white font-weight-bold">
+                <i class="bi bi-journal-plus"></i> Importation Nouveau Arriéré
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Ampidiro eto ny Fichier Excel vaovao ahitana ny **Arriérés** (Ex: `.xlsx`, `.xls`). Itaomina hoazy avy hatrany ny tarehimarika.</p>
+                <form action="/importation" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="file_type" value="arriere">
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Mifidiana rakitra Arriéré:</label>
+                        <input class="form-control" type="file" name="file" accept=".xlsx, .xls" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 fw-bold">
+                        <i class="bi bi-upload"></i> Mampiditra Nouveau Arriéré
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Etat des Encaissements -->
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100 border-success">
+            <div class="card-header bg-success text-white font-weight-bold">
+                <i class="bi bi-cash-stack"></i> Importation État des Encaissements
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Ampidiro eto ny Fichier Excel ahitana ny **Encaissements / Chiffre d'Affaires** mba hahafahana manitsy sy mikajy ny Reliquat.</p>
+                <form action="/importation" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="file_type" value="encaissement">
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Mifidiana rakitra Encaissement:</label>
+                        <input class="form-control" type="file" name="file" accept=".xlsx, .xls" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 fw-bold">
+                        <i class="bi bi-upload"></i> Mampiditra Encaissements
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <h3 class="fw-bold mb-4 text-primary"><i class="bi bi-file-earmark-exclamation"></i> Historique et Gestion des LSP & Résiliations</h3>
+
+    <!-- Cartes Récapitulatives LSP -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-primary text-white p-3">
+                <div class="d-flex align-items-center">
+                    <div class="fs-1 me-3"><i class="bi bi-file-earmark-pdf"></i></div>
+                    <div>
+                        <h6 class="mb-0 text-white-50">Total LSP Générés</h6>
+                        <h3 class="fw-bold mb-0">{{ total_lsp }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-success text-white p-3">
+                <div class="d-flex align-items-center">
+                    <div class="fs-1 me-3"><i class="bi bi-check-circle-fill"></i></div>
+                    <div>
+                        <h6 class="mb-0 text-white-50">LSP Réglés</h6>
+                        <h3 class="fw-bold mb-0">{{ count_regles }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-warning text-dark p-3">
+                <div class="d-flex align-items-center">
+                    <div class="fs-1 me-3"><i class="bi bi-hourglass-split"></i></div>
+                    <div>
+                        <h6 class="mb-0 text-dark-50">En Cours (< 40 Jours)</h6>
+                        <h3 class="fw-bold mb-0">{{ count_encours }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 bg-danger text-white p-3">
+                <div class="d-flex align-items-center">
+                    <div class="fs-1 me-3"><i class="bi bi-x-circle-fill"></i></div>
+                    <div>
+                        <h6 class="mb-0 text-white-50">Résiliation à Effectuer (> 40j)</h6>
+                        <h3 class="fw-bold mb-0">{{ count_resiliations }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tableau Historioka LSP -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0 text-secondary"><i class="bi bi-list-task"></i> Registre des Lettres de Situation de Prime (LSP)</h5>
+            <span class="badge bg-secondary">Montant Total LSP : {{ montant_total_lsp }} Ar</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>N° LSP</th>
+                            <th>Date Création</th>
+                            <th>N° Police</th>
+                            <th>Nom Client / Assuré</th>
+                            <th class="text-end">Montant Total</th>
+                            <th class="text-end">Encaissé</th>
+                            <th class="text-end">Reliquat Impayé</th>
+                            <th class="text-center">Statut</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if lsp_list %}
+                            {% for item in lsp_list %}
+                            <tr>
+                                <td class="fw-bold text-primary">{{ item['num_lsp'] }}</td>
+                                <td>{{ item['date_creation'] }}</td>
+                                <td><span class="badge bg-light text-dark border">{{ item['police_num'] }}</span></td>
+                                <td class="fw-bold">{{ item['client_name'] }}</td>
+                                <td class="text-end">{{ item['montant_total'] }} Ar</td>
+                                <td class="text-end text-success fw-bold">{{ item['total_encaisse'] }} Ar</td>
+                                <td class="text-end text-danger fw-bold">{{ item['total_reliquat'] }} Ar</td>
+                                <td class="text-center">
+                                    <span class="badge {{ item['badge_class'] }} p-2">
+                                        {{ item['statut'] }}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ url_for('generate_lsp', num=item['num_lsp']) }}" target="_blank" class="btn btn-sm btn-outline-warning text-dark fw-bold">
+                                        <i class="bi bi-printer me-1"></i> Réimprimer LSP
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="9" class="text-center py-4 text-muted">
+                                    <i class="bi bi-folder-x fs-3 d-block mb-2"></i>
+                                    Mbola tsy misy LSP namboarina aloha hatreto.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

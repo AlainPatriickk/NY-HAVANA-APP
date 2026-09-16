@@ -1,0 +1,6 @@
+Flask
+flask-login
+werkzeug
+pandas
+openpyxl
+gunicorn
