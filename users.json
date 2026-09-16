@@ -1,0 +1,37 @@
+{
+    "admin": {
+        "password": "scrypt:32768:8:1$GrSp2qozFZyqY0x4$fe04fd5c9895d5bbd1cda5fc963ebb5184fbe4812b5fc08abb4ee9c968aedd19bc07a4069e6214c37d4a4f12cd9a375801001749f2a97d573b21e94d71348e8c",
+        "role": "admin",
+        "nom_complet": "Administrateur Principal"
+    },
+    "FSRAZAFINTSOA": {
+        "password": "scrypt:32768:8:1$dxSKg6bILOaNPH2I$92813201ea758b09709e555936fbbb270267219e2618d269b18184b08524a3a547b229b0d093acdbdd2f153e7e75f7ad9960cb5d84bdf44e0da46b9e38a70a37",
+        "role": "user",
+        "nom_complet": "FABIENNE"
+    },
+    "IANDRIAMAHAFENOSOA": {
+        "password": "scrypt:32768:8:1$s2r7OZsrqcQ80slV$09cf66d8be5f66547589c5ba83290070c5eac4d45622e9a226065fcbb4861fdf962a0946a451cbf1a4af016e0a1019d59c32c9864e72330f0e42c9c29526460c",
+        "role": "user",
+        "nom_complet": "IRINTSOA"
+    },
+    "ABRATSIMBAZAFY": {
+        "password": "scrypt:32768:8:1$4iZ0Pioz0yqLBogO$b3903b1e8c7f72ff69a15737d444dd82e2e0742f8116fa67cc9eef9dfdff54ad9e8d33e121cfc642ef8b38c8ac057753b613277cd3d533c0c90b4d5f3f786e17",
+        "role": "user",
+        "nom_complet": "ANJARA"
+    },
+    "ERAHARISOA": {
+        "password": "scrypt:32768:8:1$ttfofE2NgbypQ0c7$84f828dafd43c9c53e6180b252e21d84467d4e8f08f527c2863548f52da0178eab210e20ef0cbad37bfbecffbee0de9629de8b8c8039c2743bc2d3af56ec9afe",
+        "role": "user",
+        "nom_complet": "ELY"
+    },
+    "APTODISOA": {
+        "password": "scrypt:32768:8:1$RaivQNhX8SJSLFrk$8a5544ec412a5c1796d1fd612e20f5326d54cd68f21049f619830b67586eb6845f3939c777c4bd06f088dfabc7c36b71f39a6dd9d4037210cafadd7f499ea64d",
+        "role": "admin",
+        "nom_complet": "Alain Patrick PATRICK"
+    },
+    "AMANDRIAMIHAJA": {
+        "password": "scrypt:32768:8:1$4DomBvp86Q3NLuko$0be6724eaa16cf8fc0c116406bbb7aad20c8fc0055fa27b21d90d3d43627d3d677c8d9903a2c1c758a2e81f959322f79872746d978263389bb8f077fd50c88a8",
+        "role": "admin",
+        "nom_complet": "ANGELO"
+    }
+}
