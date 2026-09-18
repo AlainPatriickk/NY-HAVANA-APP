@@ -11,6 +11,9 @@ app = Flask(__name__)
 from database import init_db
 
 init_db(app)
+with app.app_context():
+  db.create_all()
+    
 app.secret_key = "ny_havana_secret_key_pro"
 
 UPLOAD_FOLDER = 'uploads'
