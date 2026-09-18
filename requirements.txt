@@ -4,3 +4,5 @@ werkzeug
 pandas
 openpyxl
 gunicorn
+Flask-SQLAlchemy
+psycopg2-binary
