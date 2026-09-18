@@ -1,7 +1,18 @@
+import os
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+
+def init_db(application):
+  db_url = os.environ.get("DATABASE_URL")
+  if db_url and db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+  application.config["SQLALCHEMY_DATABASE_URI"] = (
+      db_url or "sqlite:///ny_havana.db"
+  )
+  db.init_app(application)
 class Client(db.Model):
     __tablename__ = 'clients'
     id = db.Column(db.Integer, primary_key=True)
