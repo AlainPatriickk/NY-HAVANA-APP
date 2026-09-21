@@ -3,14 +3,12 @@ import json
 import datetime
 import unicodedata
 import pandas as pd
-from database import db, init_db, Client, Quittance, HistoriqueDocument
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from database import db, init_db, Client, Quittance, HistoriqueDocument
 
 app = Flask(__name__)
-from database import db, init_db
-
 init_db(app)
 with app.app_context():
   db.create_all()
