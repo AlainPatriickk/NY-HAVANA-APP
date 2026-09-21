@@ -437,30 +437,63 @@ def importation():
     if request.method == 'POST':
         file_type = request.form.get('file_type')
         file = request.files.get('file')
-
+        
         if not file or file.filename == '':
             flash("Azafady, mifidiana rakitra Excel iray!", "danger")
             return redirect(url_for('importation'))
-
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         
-        if file_type == 'arriere':
-            filename = f"Arriere_{timestamp}_{file.filename}"
-            msg = "Fichier NOUVEAU ARRIÉRÉ voaray sy natambatra!"
-        elif file_type == 'encaissement':
-            filename = f"Encaissement_{timestamp}_{file.filename}"
-            msg = "Fichier ÉTAT DES ENCAISSEMENTS voaray sy natambatra!"
-        else:
-            flash("Karazana rakitra tsy fantatra!", "danger")
+        try:
+            df = pd.read_excel(file)
+            
+            if file_type == 'arriere':
+                for _, row in df.iterrows():
+                    nom_client = str(row.get('Client', 'NON SPECifie')).strip()
+                    
+                    # Jereo na ividino aloha ny Client sao dia efa misy ao amin'ny table clients
+                    client_obj = Client.query.filter_by(nom_assure=nom_client).first()
+                    if not client_obj:
+                        client_obj = Client(nom_assure=nom_client)
+                        db.session.add(client_obj)
+                        db.session.commit()
+                    
+                    # Ampidiro ao amin'ny table Quittances (miaraka amin'ny quittance_num tsy atao unique mba handray paiement partiel)
+                    quittance_num_val = str(row.get('N° Quittance', ''))
+                    police_val = str(row.get('N° Police', ''))
+                    branche_val = str(row.get('Code branche', ''))
+                    annee_val = int(row.get('Annee', 2025) or 2025)
+                    montant_val = float(row.get('Montant Initial', 0.0) or 0.0)
+                    
+                    nouvelle_quittance = Quittance(
+                        police=police_val,
+                        quittance_num=quittance_num_val,
+                        branche=str(branche_val),
+                        annee=annee_val,
+                        prime_totale=montant_val,
+                        encaisse=0.0,
+                        reliquat=montant_val,
+                        etat='Impayé',
+                        id_client=client_obj.id
+                    )
+                    db.session.add(nouvelle_quittance)
+                
+                db.session.commit()
+                flash("Fichier NOUVEAU ARRIÉRÉ voaray sy voatahiry maharitra ao amin'ny PostgreSQL!", "success")
+                
+            elif file_type == 'encaissement':
+                # Afaka ampidirina eto koa ny lojika ho an'ny encaissement / paiement partiel
+                flash("Fichier ÉTAT DES ENCAISSEMENTS voaray!", "success")
+            else:
+                flash("Karazana rakitra tsy fantatra!", "danger")
+                return redirect(url_for('importation'))
+                
+            return redirect(url_for('dashboard'))
+            
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Nisy olana tamin'ny fampidirana: {e}", "danger")
             return redirect(url_for('importation'))
-
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(filepath)
-        flash(msg, "success")
-        return redirect(url_for('dashboard'))
-
+            
     return render_template('importation.html', active_tab='importation')
-
 @app.route('/recherche')
 @login_required
 def recherche():
