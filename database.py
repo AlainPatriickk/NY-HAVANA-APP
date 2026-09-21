@@ -5,12 +5,16 @@ db = SQLAlchemy()
 
 def init_db(application):
     db_url = os.environ.get("DATABASE_URL")
-    if db_url and db_url.startswith("postgres://"):
-        db_url = db_url.replace("postgres://", "postgresql://", 1)
     
-    application.config["SQLALCHEMY_DATABASE_URI"] = (
-        db_url or "sqlite:///ny_havana.db"
-    )
+    if db_url:
+        if db_url.startswith("postgres://"):
+            db_url = db_url.replace("postgres://", "postgresql://", 1)
+        print("MIPIKA DIRECT ANY AMIN'NY POSTGRESQL NY DATABASE!")
+    else:
+        print("TSIKY DATABASE_URL! Miverina amin'ny SQLite vonjimaika (Aza atao eto raha any Render).")
+        db_url = "sqlite:///ny_havana.db"
+    
+    application.config["SQLALCHEMY_DATABASE_URI"] = db_url
     db.init_app(application)
 
 class Client(db.Model):
